@@ -1,78 +1,146 @@
-.home {
-  padding: 24px;
-  background-color: #f8f9fa;
+/* -------- Global Style -------- */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f5f6fa;
+  margin: 0;
+  padding: 0;
+  color: #2d3436;
 }
 
-.home-title {
-  font-size: 28px;
-  margin-bottom: 20px;
-}
-
-.posts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-}
-
-.post-card {
-  background-color: #fff;
-  padding: 16px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-.post-meta {
-  font-size: 12px;
-  color: #888;
-  margin-bottom: 8px;
-}
+/* -------- Home Page -------- */
 .home-page {
-  padding: 30px;
-  max-width: 900px;
-  margin: auto;
+  width: 90%;
+  max-width: 1000px;
+  margin: 60px auto;
 }
 
 .home-page h1 {
   text-align: center;
-  margin-bottom: 30px;
+  font-size: 2.5rem;
+  color: #1e272e;
+  margin-bottom: 40px;
+  position: relative;
 }
 
+.home-page h1::after {
+  content: "";
+  position: absolute;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(135deg, #007bff, #00a8ff);
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 10px;
+}
+
+/* -------- Post List -------- */
 .post-list {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 30px;
+  animation: fadeIn 0.8s ease-in-out;
 }
 
+/* -------- Post Card (Feed Style) -------- */
 .post-card {
-  background: #fff;
-  border-radius: 8px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: stretch;
+  transition: all 0.3s ease;
 }
 
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* -------- Image Section -------- */
 .post-card img {
-  width: 100%;
-  height: 250px;
+  width: 45%;
   object-fit: cover;
+  transition: transform 0.4s ease;
 }
 
+.post-card:hover img {
+  transform: scale(1.05);
+}
+
+/* -------- Content Section -------- */
 .post-content {
-  padding: 15px 20px;
+  padding: 20px 25px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.post-content h2 {
+  font-size: 1.6rem;
+  color: #222f3e;
+  margin-bottom: 8px;
 }
 
 .author {
-  font-size: 13px;
-  color: gray;
+  color: #576574;
+  font-size: 0.9rem;
   margin-bottom: 10px;
 }
 
+.post-content p {
+  color: #485460;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+/* -------- Read More Button -------- */
 .read-btn {
-  color: #007bff;
-  font-weight: bold;
+  align-self: flex-start;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #007bff, #00a8ff);
+  color: white;
+  border-radius: 8px;
   text-decoration: none;
+  transition: all 0.3s ease;
 }
 
 .read-btn:hover {
-  text-decoration: underline;
+  background: linear-gradient(135deg, #0056b3, #0077b6);
+  transform: translateY(-2px);
+}
+
+/* -------- Animations -------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* -------- Responsive -------- */
+@media (max-width: 768px) {
+  .post-card {
+    flex-direction: column;
+  }
+
+  .post-card img {
+    width: 100%;
+    height: 200px;
+  }
+
+  .post-content h2 {
+    font-size: 1.3rem;
+  }
+
+  .home-page h1 {
+    font-size: 2rem;
+  }
 }
