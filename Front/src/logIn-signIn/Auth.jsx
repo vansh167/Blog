@@ -1,19 +1,18 @@
-import React, { useState } from "react";
-import "./style.css"; // keep your same CSS
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import "./style.css";
 import logImg from "../images/log (1).svg";
-import registerImg from '../images/register.svg'
+import registerImg from '../images/register.svg';
 
 const AuthPage = () => {
-  // ---------------- STATE ----------------
   const [isSignUpMode, setIsSignUpMode] = useState(false);
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ username: "", email: "", password: "" });
   const [message, setMessage] = useState("");
 
-  // ---------------- HANDLE INPUT CHANGE ----------------
+  const { login } = useContext(AuthContext); // ✅ useContext now works
+  const navigate = useNavigate();
+ // ---------------- HANDLE INPUT CHANGE ----------------
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -66,7 +65,10 @@ const AuthPage = () => {
     const data = await res.json();
     if (res.ok) {
       localStorage.setItem("token", data.token);
+      login(data.user); 
       setMessage("✅ Login successful!");
+                                      // 🔥 Redirect to dashboard
+      navigate("/dashboard");
     } else {
       setMessage(data.message || "Invalid credentials");
     }
@@ -74,8 +76,7 @@ const AuthPage = () => {
     console.error("Login fetch error:", error);
     setMessage("❌ Error connecting to server");
   }
-};
-
+ };
 
   // ---------------- UI ----------------
   return (

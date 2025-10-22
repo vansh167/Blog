@@ -1,13 +1,25 @@
-import React from 'react'
-import LoginSignupForm from './logIn-signIn/login'
-
-const App = () => {
+// App.js or wherever you define routes
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/Home";
+import AuthPage from "./logIn-signIn/Auth";
+import CreatePost from "./pages/CreatePost";
+import SinglePost from "./pages/SinglePost";
+import Navbar from "./components/Navbar/Navbar";
+function App() {
   return (
-    <div>
-<LoginSignupForm/>
-
-    </div>
-  )
+    <Router>
+      
+      <Routes>
+        <Route path="/" element={<AuthPage/>} />
+       </Routes>
+        <Navbar/>
+      <Routes>
+        <Route path="/create" element={<CreatePost/>} />
+        <Route path="/dashboard" element={<Dashboard />} />
+         <Route path="/post/:id" element={<SinglePost />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
