@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Home.css";
+import Banner from "./Banner";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -11,6 +12,8 @@ const Home = () => {
   }, []);
 
   return (
+    <>
+    <Banner/>
     <div className="home-page">
       <h1>Latest Posts</h1>
 
@@ -31,7 +34,7 @@ const Home = () => {
           ))}
         </div>
       )}
-    </div>
+    </div></>
   );
 };
 
