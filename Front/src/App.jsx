@@ -8,8 +8,8 @@ import Home from "./pages/Home";
 
 function App() {
   return (
-    <Router>
-      <Navbar/>
+    <Router> 
+      <Navbar/> ``
       <Routes>
         <Route path="/" element={<AuthPage />} />
         <Route path="/create" element={<CreatePost />} />
