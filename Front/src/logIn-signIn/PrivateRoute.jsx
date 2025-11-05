@@ -1,16 +1,19 @@
 import React, { useContext } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 const PrivateRoute = ({ children }) => {
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext) || {};
+  const location = useLocation();
 
-  // If user is not logged in, redirect to login page
-  if (!user) {
-    return <Navigate to="/dashboard" replace />;
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const isAuthed = Boolean(user) || Boolean(token);
+
+  // If not authenticated, redirect to auth page and preserve intended path
+  if (!isAuthed) {
+    return <Navigate to="/auth" replace state={{ from: location }} />;
   }
 
-  // If logged in, render the protected page
   return children;
 };
 

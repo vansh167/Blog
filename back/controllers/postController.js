@@ -3,10 +3,11 @@ const Post = require('../models/Post');
 // CREATE post
 exports.createPost = async (req, res) => {
   try {
-    const { title, content } = req.body;
+    const { title, content, image } = req.body;
     const post = await Post.create({
       title,
       content,
+      image,
       author: req.user._id,
     });
     res.status(201).json(post);
@@ -42,6 +43,9 @@ exports.updatePost = async (req, res) => {
 
   post.title = req.body.title || post.title;
   post.content = req.body.content || post.content;
+  if (typeof req.body.image !== 'undefined') {
+    post.image = req.body.image;
+  }
 
   const updatedPost = await post.save();
   res.json(updatedPost);

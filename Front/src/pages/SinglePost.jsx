@@ -7,9 +7,19 @@ const SinglePost = () => {
   const [post, setPost] = useState(null);
 
   useEffect(() => {
-    const posts = JSON.parse(localStorage.getItem("posts")) || [];
-    const found = posts.find((p) => p.id === Number(id));
-    setPost(found);
+    const API = import.meta?.env?.VITE_API_BASE_URL || "http://localhost:5000";
+    const load = async () => {
+      try {
+        const res = await fetch(`${API}/api/posts/${id}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || data.msg || "Failed to fetch post");
+        setPost(data);
+      } catch (e) {
+        console.error("Fetch post error:", e);
+        setPost(null);
+      }
+    };
+    if (id) load();
   }, [id]);
 
   if (!post)
@@ -28,8 +38,8 @@ const SinglePost = () => {
           <h1>{post.title}</h1>
 
           <div className="meta-premium">
-            <span className="author">By {post.author}</span>
-            <span className="date">{post.date}</span>
+            <span className="author">By {post.author?.name || post.author?.username || post.author || "Unknown"}</span>
+            <span className="date">{post.createdAt ? new Date(post.createdAt).toLocaleString() : post.date || ""}</span>
             {post.category && <span className="category">{post.category}</span>}
           </div>
 
@@ -42,7 +52,7 @@ const SinglePost = () => {
           )}
 
           <div className="content-premium">
-            {post.content.split("\n").map((para, index) => (
+            {(post.content || "").split("\n").map((para, index) => (
               <p key={index}>{para}</p>
             ))}
           </div>
