@@ -65,9 +65,11 @@ const AuthPage = () => {
     const data = await res.json();
     if (res.ok) {
       localStorage.setItem("token", data.token);
-      login(data.user); 
+      // backend returns the user object as the response body (with _id, name, email, token)
+      // pass the whole data object to login so AuthContext and localStorage.user are populated
+      login(data);
       setMessage("✅ Login successful!");
-                                      // 🔥 Redirect to dashboard
+      // Redirect to dashboard
       navigate("/dashboard");
     } else {
       setMessage(data.message || "Invalid credentials");

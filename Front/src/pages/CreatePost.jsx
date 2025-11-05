@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "./CreatePost.css";
+import { useLocation } from 'react-router-dom';
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -10,6 +11,9 @@ const CreatePost = () => {
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const editId = params.get('id');
 
   const { user, logout } = useContext(AuthContext);
 
@@ -20,6 +24,26 @@ const CreatePost = () => {
       navigate("/auth", { replace: true });
     }
   }, [navigate]);
+
+  // If editId exists, load the post to prefill the form
+  useEffect(() => {
+    if (!editId) return;
+    const loadPost = async () => {
+      try {
+        const API = import.meta?.env?.VITE_API_BASE_URL || "http://localhost:5000";
+        const res = await fetch(`${API}/api/posts/${editId}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed to fetch post');
+        setTitle(data.title || '');
+        setContent(data.content || '');
+        setImage(data.image || '');
+      } catch (err) {
+        console.error('Load post failed', err);
+        setMessage(err.message || 'Failed to load post');
+      }
+    };
+    loadPost();
+  }, [editId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,14 +61,27 @@ const CreatePost = () => {
 
       const API = import.meta?.env?.VITE_API_BASE_URL || "http://localhost:5000";
 
-      const res = await fetch(`${API}/api/posts`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // must exist and be valid
-        },
-        body: JSON.stringify({ title, content, image }),
-      });
+      let res;
+      if (editId) {
+        // update existing post
+        res = await fetch(`${API}/api/posts/${editId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ title, content, image }),
+        });
+      } else {
+        res = await fetch(`${API}/api/posts`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ title, content, image }),
+        });
+      }
 
       let data;
       try {

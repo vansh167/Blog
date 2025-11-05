@@ -41,3 +41,22 @@ exports.login = async (req, res) => {
     res.status(401).json({ message: 'Invalid email or password' });
   }
 };
+
+// PUT /api/auth/profile -> update current user's profile (protected)
+exports.updateProfile = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (!user) return res.status(404).json({ message: 'User not found' });
+
+  user.name = req.body.name || user.name;
+  if (typeof req.body.bio !== 'undefined') user.bio = req.body.bio;
+  if (typeof req.body.avatar !== 'undefined') user.avatar = req.body.avatar;
+
+  const updated = await user.save();
+  res.json({
+    _id: updated._id,
+    name: updated.name,
+    email: updated.email,
+    bio: updated.bio,
+    avatar: updated.avatar,
+  });
+};

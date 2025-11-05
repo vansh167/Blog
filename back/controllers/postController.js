@@ -53,13 +53,27 @@ exports.updatePost = async (req, res) => {
 
 // DELETE post
 exports.deletePost = async (req, res) => {
-  const post = await Post.findById(req.params.id);
-  if (!post) return res.status(404).json({ message: 'Post not found' });
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
 
-  if (post.author.toString() !== req.user._id.toString()) {
-    return res.status(403).json({ message: 'You can only delete your own posts' });
+    // ensure req.user exists and is allowed
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ message: 'Not authorized' });
+    }
+
+    // support both ObjectId and string author shapes
+    const authorId = (post.author && post.author.toString) ? post.author.toString() : String(post.author);
+    const userId = req.user._id.toString();
+
+    if (authorId !== userId) {
+      return res.status(403).json({ message: 'You can only delete your own posts' });
+    }
+
+    await post.deleteOne();
+    return res.json({ message: 'Post removed' });
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    return res.status(500).json({ message: error.message || 'Server error while deleting post' });
   }
-
-  await post.remove();
-  res.json({ message: 'Post removed' });
 };
