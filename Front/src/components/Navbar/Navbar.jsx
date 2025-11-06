@@ -25,9 +25,9 @@ const Navbar = () => {
     <nav className="navbar navbar-elevated">
       <div className="navbar-left">
         <Link to="/dashboard" className="brand">
-          
+
           <div>
-          <span className="brand-name">
+            <span className="brand-name">
               <span className="brand-badge">M</span>
               yB<span className="brand-badge1">l</span>og</span></div>
         </Link>
@@ -37,11 +37,10 @@ const Navbar = () => {
           <Link to="/create" className="nav-link">Create</Link>
           <Link to="/category" className="nav-link">Category</Link>
           <Link to="/dashboard" className="nav-link">Blog</Link>
-          <Link to="/author" className="nav-link">Author</Link>
           <Link to="/about" className="nav-link">About</Link>
-
+          <Link to="/contact" className="nav-link">Contact Us</Link>
           {/* Logout button */}
-          
+
         </div>
       </div>
 
@@ -55,12 +54,12 @@ const Navbar = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-         
+
         </form>
       </div>
 
       <div className="navbar-right">
-        <Link to="/contact" className="btn btn-pill btn-ghost">Contact Us</Link>
+        <Link to="/author" className="btn btn-pill btn-ghost">Author</Link>
 
         {user ? (
           <Link to="/auth" className="btn btn-pill btn-primary">Logout</Link>
