@@ -12,75 +12,81 @@ const AuthPage = () => {
 
   const { login } = useContext(AuthContext); // ✅ useContext now works
   const navigate = useNavigate();
- // ---------------- HANDLE INPUT CHANGE ----------------
+  // ---------------- HANDLE INPUT CHANGE ----------------
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // ---------------- SOCIAL SIGN-IN ----------------
+  // Opens backend OAuth endpoints. Adjust provider routes if your backend differs.
+  const handleSocialSignIn = (provider) => {
+    // open in same tab to let backend redirect back to app (or use popup and postMessage flow)
+    window.location.href = `http://localhost:5000/api/auth/${provider}`;
+  };
+
   // ---------------- SIGNUP FUNCTION ----------------
- const handleSignup = async (e) => {
-  e.preventDefault();
-  setMessage("");
-  
-  try {
-    const res = await fetch("http://localhost:5000/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: formData.username,
-        email: formData.email,
-        password: formData.password,
-      }),
-    });
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setMessage("");
 
-    const data = await res.json();
-    if (res.ok) {
-      setMessage("✅ Signup successful! Please login now.");
-      setIsSignUpMode(false);
-    } else {
-      setMessage(data.message || "Signup failed");
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.username,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setMessage("✅ Signup successful! Please login now.");
+        setIsSignUpMode(false);
+      } else {
+        setMessage(data.message || "Signup failed");
+      }
+    } catch (error) {
+      console.error("Signup fetch error:", error);
+      setMessage("❌ Error connecting to server");
     }
-  } catch (error) {
-    console.error("Signup fetch error:", error);
-    setMessage("❌ Error connecting to server");
-  }
-};
-
-
+  };
+  // ...existing code...
   // ---------------- LOGIN FUNCTION ----------------
- const handleLogin = async (e) => {
-  e.preventDefault();
-  setMessage("");
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setMessage("");
 
-  try {
-    const res = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: formData.email,
-        password: formData.password,
-      }),
-    });
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
 
-    const data = await res.json();
-    if (res.ok) {
-      localStorage.setItem("token", data.token);
-      // backend returns the user object as the response body (with _id, name, email, token)
-      // pass the whole data object to login so AuthContext and localStorage.user are populated
-      login(data);
-      setMessage("✅ Login successful!");
-      // Redirect to dashboard
-      navigate("/dashboard");
-    } else {
-      setMessage(data.message || "Invalid credentials");
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        // backend returns the user object as the response body (with _id, name, email, token)
+        // pass the whole data object to login so AuthContext and localStorage.user are populated
+        login(data);
+        setMessage("✅ Login successful!");
+        // Redirect to dashboard
+        navigate("/dashboard");
+      } else {
+        setMessage(data.message || "Invalid credentials");
+      }
+    } catch (error) {
+      console.error("Login fetch error:", error);
+      setMessage("❌ Error connecting to server");
     }
-  } catch (error) {
-    console.error("Login fetch error:", error);
-    setMessage("❌ Error connecting to server");
-  }
- };
+  };
 
-  // ---------------- UI ----------------
+  // ---------------- UI ----------------//
   return (
     <div className={`container ${isSignUpMode ? "sign-up-mode" : ""}`}>
       <div className="forms-container">
@@ -115,10 +121,22 @@ const AuthPage = () => {
             <input type="submit" value="Login" className="btn solid" />
             <p className="social-text">Or Sign in with social platforms</p>
             <div className="social-media">
-              <a href="#" className="social-icon"><i className="fab fa-facebook-f"></i></a>
-              <a href="#" className="social-icon"><i className="fab fa-twitter"></i></a>
-              <a href="#" className="social-icon"><i className="fab fa-google"></i></a>
-              <a href="#" className="social-icon"><i className="fab fa-linkedin-in"></i></a>
+              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('facebook')} aria-label="Sign in with Facebook" title="Facebook">
+                <i className="fab fa-facebook-f"></i>
+                <span className="platform-label">Facebook</span>
+              </button>
+              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('twitter')} aria-label="Sign in with Twitter" title="Twitter">
+                <i className="fab fa-twitter"></i>
+                <span className="platform-label">Twitter</span>
+              </button>
+              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('google')} aria-label="Sign in with Google" title="Google">
+                <i className="fab fa-google"></i>
+                <span className="platform-label">Google</span>
+              </button>
+              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('linkedin')} aria-label="Sign in with LinkedIn" title="LinkedIn">
+                <i className="fab fa-linkedin-in"></i>
+                <span className="platform-label">LinkedIn</span>
+              </button>
             </div>
           </form>
 
@@ -163,10 +181,22 @@ const AuthPage = () => {
             <input type="submit" className="btn" value="Sign up" />
             <p className="social-text">Or Sign up with social platforms</p>
             <div className="social-media">
-              <a href="#" className="social-icon"><i className="fab fa-facebook-f"></i></a>
-              <a href="#" className="social-icon"><i className="fab fa-twitter"></i></a>
-              <a href="#" className="social-icon"><i className="fab fa-google"></i></a>
-              <a href="#" className="social-icon"><i className="fab fa-linkedin-in"></i></a>
+              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('facebook')} aria-label="Sign up with Facebook" title="Facebook">
+                <i className="fab fa-facebook-f"></i>
+                <span className="platform-label">Facebook</span>
+              </button>
+              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('twitter')} aria-label="Sign up with Twitter" title="Twitter">
+                <i className="fab fa-twitter"></i>
+                <span className="platform-label">Twitter</span>
+              </button>
+              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('google')} aria-label="Sign up with Google" title="Google">
+                <i className="fab fa-google"></i>
+                <span className="platform-label">Google</span>
+              </button>
+              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('linkedin')} aria-label="Sign up with LinkedIn" title="LinkedIn">
+                <i className="fab fa-linkedin-in"></i>
+                <span className="platform-label">LinkedIn</span>
+              </button>
             </div>
           </form>
         </div>

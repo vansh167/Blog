@@ -15,8 +15,9 @@ const Navbar = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    console.log("Search Query:", searchQuery); // Debugging line
     if (searchQuery.trim() !== "") {
-      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+      navigate(`/search?q=test`);
       setSearchQuery("");
     }
   };
@@ -25,11 +26,12 @@ const Navbar = () => {
     <nav className="navbar navbar-elevated">
       <div className="navbar-left">
         <Link to="/dashboard" className="brand">
-
           <div>
             <span className="brand-name">
               <span className="brand-badge">M</span>
-              yB<span className="brand-badge1">l</span>og</span></div>
+              yB<span className="brand-badge1">l</span>og
+            </span>
+          </div>
         </Link>
 
         <div className="nav-items">
@@ -39,8 +41,6 @@ const Navbar = () => {
           <Link to="/dashboard" className="nav-link">Blog</Link>
           <Link to="/about" className="nav-link">About</Link>
           <Link to="/contact" className="nav-link">Contact Us</Link>
-          {/* Logout button */}
-
         </div>
       </div>
 
@@ -54,7 +54,7 @@ const Navbar = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-
+         
         </form>
       </div>
 
