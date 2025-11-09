@@ -109,27 +109,41 @@ form.sign-in-form {
 
 .social-media {
   display: flex;
-  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .social-icon {
-  height: 46px;
-  width: 46px;
-  display: flex;
-  justify-content: center;
+  display: inline-flex;
   align-items: center;
-  margin: 0 0.45rem;
-  color: #333;
-  border-radius: 50%;
-  border: 1px solid #333;
-  text-decoration: none;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--social-btn-bg, #fff);
+  color: var(--social-btn-color, #333);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 0.08s ease;
+}
+
+.social-icon i {
   font-size: 1.1rem;
-  transition: 0.3s;
 }
 
 .social-icon:hover {
-  color: #4481eb;
-  border-color: #4481eb;
+  transform: translateY(-2px);
+}
+
+.platform-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* hide labels on very small screens to save space */
+@media (max-width: 480px) {
+  .platform-label {
+    display: none;
+  }
 }
 
 .btn {
@@ -150,6 +164,7 @@ form.sign-in-form {
 .btn:hover {
   background-color: #4d84e2;
 }
+
 .panels-container {
   position: absolute;
   height: 100%;
@@ -275,6 +290,7 @@ form.sign-in-form {
     min-height: 800px;
     height: 100vh;
   }
+
   .signin-signup {
     width: 100%;
     top: 95%;
@@ -381,9 +397,11 @@ form.sign-in-form {
   .image {
     display: none;
   }
+
   .panel .content {
     padding: 0.5rem 1rem;
   }
+
   .container {
     padding: 1.5rem;
   }
