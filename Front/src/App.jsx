@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AuthPage from "./logIn-signIn/Auth";
-import CreatePost from "./pages/CreatePost";
-import SinglePost from "./pages/SinglePost";
+import CreatePost from "./CreatePost/CreatePost";
+import SinglePost from "./SinglePage/SinglePost";
 import Navbar from "./components/Navbar/Navbar";
 
-import Home from "./pages/Home";
+import Home from "./Home/Home";
 import PrivateRoute from "./logIn-signIn/PrivateRoute";
 import Author from "./author/Author"
 import Footer from "./pages/Description";
