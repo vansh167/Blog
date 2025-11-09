@@ -13,6 +13,7 @@ import About from "./about/About";
 import Category from "./category/Category";
 import "./App.css";
 import Sidebar from "./components/Sidebar/SideBar";
+import Users from "./components/Users/Users";
 
 
 
@@ -38,7 +39,9 @@ function App() {
         <Route path="/author" element={<Author />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/about" element={<About />} />
-        <Route path="/sub" element={<Sidebar/>} />
+  <Route path="/sub" element={<Sidebar/>} />
+  {/* Users management page (open when clicking User in sidebar) */}
+  <Route path="/users" element={<Users/>} />
 
       </Routes>
       <Footer/>

@@ -5,6 +5,7 @@ const connectDB = require('./config/db');
 
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/Post');
+const usersRoutes = require('./routes/users');
 
 const app = express();
 connectDB();
@@ -15,6 +16,7 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/users', usersRoutes);
 
 app.get('/', (req, res) => res.send('API is running...'));
 

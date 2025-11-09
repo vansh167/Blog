@@ -1,0 +1,22 @@
+.author-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f6fa;
+}
+
+/* Sidebar stays on the left */
+.sidebar {
+  width: 80px; /* or your desired size */
+  background-color: #111;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Page content area */
+.author-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}

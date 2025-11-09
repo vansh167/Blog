@@ -1,0 +1,105 @@
+/* Sidebar base style */
+.sidebar {
+  height: 100vh;
+  width: 90px;
+  background: linear-gradient(180deg, #0f172a, #1e293b);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-right: 1px solid #334155;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  transition: all 0.3s ease;
+}
+
+/* Logo */
+.logo {
+  font-size: 2rem;
+  color: #60a5fa;
+  margin-bottom: 2rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Menu layout */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Button styles */
+.icon-btn {
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.25s ease-in-out;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Active & Inactive states */
+.icon-btn.active {
+  background-color: #2563eb;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.5);
+  transform: scale(1.1);
+}
+
+.icon-btn.inactive {
+  background: transparent;
+  color: #9ca3af;
+}
+
+.icon-btn.inactive:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Tooltip */
+.menu-item {
+  position: relative;
+}
+
+.tooltip {
+  position: absolute;
+  left: 4.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #1e293b;
+  color: #f1f5f9;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  opacity: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.menu-item:hover .tooltip {
+  opacity: 1;
+  left: 4.8rem;
+}
+
+/* Footer */
+.footer {
+  margin-top: auto;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* Logo float animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}

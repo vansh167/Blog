@@ -1,0 +1,24 @@
+.users-page {
+  padding: 24px;
+  /* leave space for the sidebar (90px) + small gap */
+  margin-left: 110px;
+  /* ensure content is visible above sidebar overlays */
+  position: relative;
+  z-index: 5;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.users-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.user-card {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+}
