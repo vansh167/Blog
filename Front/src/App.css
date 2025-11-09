@@ -1,5 +1,24 @@
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 280px; /* Same as sidebar width */
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
 .posts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
 }
