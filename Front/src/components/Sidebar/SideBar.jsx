@@ -10,7 +10,7 @@ const Sidebar = () => {
 
   const menuItems = [
     { id: "user", label: "User", icon: <User size={22} />, route: '/users' },
-    { id: "request", label: "Request", icon: <Mail size={22} />, route: '/author/requests' },
+    { id: "request", label: "Request", icon: <Mail size={22} />, route: '/request' },
     { id: "posts", label: "Posts", icon: <FileText size={22} />, route: '/author/posts' },
     { id: "settings", label: "Settings", icon: <Settings size={22} />, route: '/author/settings' },
   ];

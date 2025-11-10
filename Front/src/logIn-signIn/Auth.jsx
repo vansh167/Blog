@@ -3,24 +3,23 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
 import logImg from "../images/log (1).svg";
-import registerImg from '../images/register.svg';
+import registerImg from "../images/register.svg";
 
 const AuthPage = () => {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [formData, setFormData] = useState({ username: "", email: "", password: "" });
   const [message, setMessage] = useState("");
 
-  const { login } = useContext(AuthContext); // ✅ useContext now works
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+
   // ---------------- HANDLE INPUT CHANGE ----------------
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   // ---------------- SOCIAL SIGN-IN ----------------
-  // Opens backend OAuth endpoints. Adjust provider routes if your backend differs.
   const handleSocialSignIn = (provider) => {
-    // open in same tab to let backend redirect back to app (or use popup and postMessage flow)
     window.location.href = `http://localhost:5000/api/auth/${provider}`;
   };
 
@@ -30,7 +29,7 @@ const AuthPage = () => {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/signup", {
+      const res = await fetch("http://localhost:5000/api/requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -41,8 +40,9 @@ const AuthPage = () => {
       });
 
       const data = await res.json();
+
       if (res.ok) {
-        setMessage("✅ Signup successful! Please login now.");
+        setMessage("✅ Signup request submitted! Wait for admin approval.");
         setIsSignUpMode(false);
       } else {
         setMessage(data.message || "Signup failed");
@@ -52,7 +52,7 @@ const AuthPage = () => {
       setMessage("❌ Error connecting to server");
     }
   };
-  // ...existing code...
+
   // ---------------- LOGIN FUNCTION ----------------
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -62,31 +62,25 @@ const AuthPage = () => {
       const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
+        body: JSON.stringify({ email: formData.email, password: formData.password }),
       });
 
       const data = await res.json();
+      console.log("Login response:", res.status, data); // Debugging tip
+
       if (res.ok) {
         localStorage.setItem("token", data.token);
-        // backend returns the user object as the response body (with _id, name, email, token)
-        // pass the whole data object to login so AuthContext and localStorage.user are populated
         login(data);
-        setMessage("✅ Login successful!");
-        // Redirect to dashboard
         navigate("/dashboard");
       } else {
-        setMessage(data.message || "Invalid credentials");
+        setMessage(data.message || "❌ Invalid email or password");
       }
-    } catch (error) {
-      console.error("Login fetch error:", error);
-      setMessage("❌ Error connecting to server");
+    } catch (err) {
+      console.error("Login error:", err);
+      setMessage("❌ Server error. Try again later.");
     }
   };
 
-  // ---------------- UI ----------------//
   return (
     <div className={`container ${isSignUpMode ? "sign-up-mode" : ""}`}>
       <div className="forms-container">
@@ -94,7 +88,6 @@ const AuthPage = () => {
           {/* ------------ LOGIN FORM ------------ */}
           <form className="sign-in-form" onSubmit={handleLogin}>
             <h2 className="title">Sign in</h2>
-
             <div className="input-field">
               <i className="fas fa-envelope"></i>
               <input
@@ -117,33 +110,28 @@ const AuthPage = () => {
                 required
               />
             </div>
-
             <input type="submit" value="Login" className="btn solid" />
             <p className="social-text">Or Sign in with social platforms</p>
             <div className="social-media">
-              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('facebook')} aria-label="Sign in with Facebook" title="Facebook">
-                <i className="fab fa-facebook-f"></i>
-                <span className="platform-label">Facebook</span>
-              </button>
-              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('twitter')} aria-label="Sign in with Twitter" title="Twitter">
-                <i className="fab fa-twitter"></i>
-                <span className="platform-label">Twitter</span>
-              </button>
-              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('google')} aria-label="Sign in with Google" title="Google">
-                <i className="fab fa-google"></i>
-                <span className="platform-label">Google</span>
-              </button>
-              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('linkedin')} aria-label="Sign in with LinkedIn" title="LinkedIn">
-                <i className="fab fa-linkedin-in"></i>
-                <span className="platform-label">LinkedIn</span>
-              </button>
+              {["facebook", "twitter", "google", "linkedin"].map((provider) => (
+                <button
+                  type="button"
+                  key={provider}
+                  className="social-icon"
+                  onClick={() => handleSocialSignIn(provider)}
+                  aria-label={`Sign in with ${provider}`}
+                  title={provider.charAt(0).toUpperCase() + provider.slice(1)}
+                >
+                  <i className={`fab fa-${provider === "google" ? "google" : provider}-f`}></i>
+                  <span className="platform-label">{provider}</span>
+                </button>
+              ))}
             </div>
           </form>
 
           {/* ------------ SIGNUP FORM ------------ */}
           <form className="sign-up-form" onSubmit={handleSignup}>
             <h2 className="title">Sign up</h2>
-
             <div className="input-field">
               <i className="fas fa-user"></i>
               <input
@@ -177,26 +165,22 @@ const AuthPage = () => {
                 required
               />
             </div>
-
             <input type="submit" className="btn" value="Sign up" />
             <p className="social-text">Or Sign up with social platforms</p>
             <div className="social-media">
-              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('facebook')} aria-label="Sign up with Facebook" title="Facebook">
-                <i className="fab fa-facebook-f"></i>
-                <span className="platform-label">Facebook</span>
-              </button>
-              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('twitter')} aria-label="Sign up with Twitter" title="Twitter">
-                <i className="fab fa-twitter"></i>
-                <span className="platform-label">Twitter</span>
-              </button>
-              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('google')} aria-label="Sign up with Google" title="Google">
-                <i className="fab fa-google"></i>
-                <span className="platform-label">Google</span>
-              </button>
-              <button type="button" className="social-icon" onClick={() => handleSocialSignIn('linkedin')} aria-label="Sign up with LinkedIn" title="LinkedIn">
-                <i className="fab fa-linkedin-in"></i>
-                <span className="platform-label">LinkedIn</span>
-              </button>
+              {["facebook", "twitter", "google", "linkedin"].map((provider) => (
+                <button
+                  type="button"
+                  key={provider}
+                  className="social-icon"
+                  onClick={() => handleSocialSignIn(provider)}
+                  aria-label={`Sign up with ${provider}`}
+                  title={provider.charAt(0).toUpperCase() + provider.slice(1)}
+                >
+                  <i className={`fab fa-${provider === "google" ? "google" : provider}-f`}></i>
+                  <span className="platform-label">{provider}</span>
+                </button>
+              ))}
             </div>
           </form>
         </div>

@@ -1,0 +1,102 @@
+.requests-page {
+    padding: 40px;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f9fafc);
+    min-height: 100vh;
+    color: #1e293b;
+}
+
+.requests-page h1 {
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #6366f1, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    color: #64748b;
+    margin-bottom: 20px;
+}
+
+.requests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.request-card {
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.2s ease;
+}
+
+.request-card:hover {
+    transform: translateY(-3px);
+}
+
+.request-card h3 {
+    margin: 0;
+    color: #1e293b;
+}
+
+.request-card p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.status {
+    display: inline-block;
+    margin-top: 6px;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.accept-btn,
+.reject-btn {
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.25s ease;
+}
+
+.accept-btn {
+    background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.accept-btn:hover {
+    transform: scale(1.05);
+}
+
+.reject-btn {
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+}
+
+.reject-btn:hover {
+    transform: scale(1.05);
+}
+
+.no-requests {
+    text-align: center;
+    color: #64748b;
+    padding: 50px;
+    font-size: 18px;
+}

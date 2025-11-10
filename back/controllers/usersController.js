@@ -26,24 +26,25 @@ exports.getUserById = async (req, res) => {
 };
 
 // DELETE /api/users/:id - delete user (protected)
+// controllers/usersController.js
+// DELETE /api/users/:id
 exports.deleteUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const userId = req.params.id;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required' });
+    }
+
+    const user = await User.findByIdAndDelete(userId);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Optional: restrict delete to admin users only
-    // if (!req.user || !req.user.isAdmin) {
-    //   return res.status(403).json({ message: 'Not authorized to delete users' });
-    // }
-
-    await user.deleteOne();
-
-    res.json({ message: 'User deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting user:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.json({ message: `User ${user.email} deleted successfully` });
+  } catch (err) {
+    console.error('Error deleting user:', err);
+    res.status(500).json({ message: 'Server error while deleting user' });
   }
 };
