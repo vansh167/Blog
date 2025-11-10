@@ -11,6 +11,11 @@ const TotalPost = () => {
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
 
+    // 🧠 Get logged-in user from localStorage
+    const user = JSON.parse(localStorage.getItem("user")); // user info saved after login
+    const isAdmin = user?.email === "kadmin@gmail.com"; // Only this email can delete
+    const token = localStorage.getItem("token"); // must be the token containing email
+
     // Fetch posts
     const fetchPosts = async () => {
         try {
@@ -36,9 +41,15 @@ const TotalPost = () => {
         if (!isConfirmed) return;
 
         try {
+            const token = localStorage.getItem("token");
             const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
                 method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
             });
+
             const data = await res.json();
 
             if (res.ok) {
@@ -56,8 +67,8 @@ const TotalPost = () => {
     // Filter posts
     const filteredPosts = posts.filter(
         (post) =>
-        (post.title?.toLowerCase().includes(search.toLowerCase()) ||
-            post.content?.toLowerCase().includes(search.toLowerCase()))
+            post.title?.toLowerCase().includes(search.toLowerCase()) ||
+            post.content?.toLowerCase().includes(search.toLowerCase())
     );
 
     // Pagination
@@ -73,59 +84,63 @@ const TotalPost = () => {
 
     return (
         <AuthorLayout>
-        <div className="total-post-container">
-            <div className="header">
-                <h2>Total Posts: {filteredPosts.length}</h2>
-                <input
-                    type="text"
-                    placeholder="Search posts..."
-                    value={search}
-                    onChange={(e) => {
-                        setSearch(e.target.value);
-                        setCurrentPage(1); // reset to first page when searching
-                    }}
-                    className="search-input"
-                />
-            </div>
+            <div className="total-post-container">
+                <div className="header">
+                    <h2>Total Posts: {filteredPosts.length}</h2>
+                    <input
+                        type="text"
+                        placeholder="Search posts..."
+                        value={search}
+                        onChange={(e) => {
+                            setSearch(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                        className="search-input"
+                    />
+                </div>
 
-            {message && <p className="message">{message}</p>}
+                {message && <p className="message">{message}</p>}
 
-            <div className="posts-list">
-                {currentPosts.length === 0 ? (
-                    <p>No posts found.</p>
-                ) : (
-                    currentPosts.map((post) => (
-                        <div className="post-card" key={post._id}>
-                            <h3>{post.title || "Untitled"}</h3>
-                            <p className="author-date">
-                                By {post.author?.name || "Admin"} |{" "}
-                                {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Unknown date"}
-                            </p>
-                            <p>{post.content ? post.content.substring(0, 100) + "..." : "No content"}</p>
-                            <button className="delete-btn" onClick={() => handleDelete(post._id)}>
-                                Delete
-                            </button>
-                        </div>
+                <div className="posts-list">
+                    {currentPosts.length === 0 ? (
+                        <p>No posts found.</p>
+                    ) : (
+                        currentPosts.map((post) => (
+                            <div className="post-card" key={post._id}>
+                                <h3>{post.title || "Untitled"}</h3>
+                                <p className="author-date">
+                                    By {post.author?.name || "Admin"} |{" "}
+                                    {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Unknown date"}
+                                </p>
+                                <p>{post.content ? post.content.substring(0, 100) + "..." : "No content"}</p>
 
-                    ))
+                                {/* 👇 Only show Delete if the logged user is the admin */}
+                                {isAdmin && (
+                                    <button className="delete-btn" onClick={() => handleDelete(post._id)}>
+                                        Delete
+                                    </button>
+                                )}
+                            </div>
+                        ))
+                    )}
+                </div>
+
+                {totalPages > 1 && (
+                    <div className="pagination">
+                        <button onClick={prevPage} disabled={currentPage === 1}>
+                            Prev
+                        </button>
+                        <span>
+                            Page {currentPage} of {totalPages}
+                        </span>
+                        <button onClick={nextPage} disabled={currentPage === totalPages}>
+                            Next
+                        </button>
+                    </div>
                 )}
             </div>
-
-            {totalPages > 1 && (
-                <div className="pagination">
-                    <button onClick={prevPage} disabled={currentPage === 1}>
-                        Prev
-                    </button>
-                    <span>
-                        Page {currentPage} of {totalPages}
-                    </span>
-                    <button onClick={nextPage} disabled={currentPage === totalPages}>
-                        Next
-                    </button>
-                </div>
-            )}
-        </div>
-  </AuthorLayout>  );
+        </AuthorLayout>
+    );
 };
 
 export default TotalPost;

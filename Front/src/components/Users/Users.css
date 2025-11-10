@@ -205,3 +205,92 @@
   color: #475569;
   font-weight: 500;
 }
+
+/* Watch Time Stat */
+.stat-card.watch-time p {
+  color: #f59e0b;
+  /* amber */
+}
+
+/* Individual User Watch Time */
+.user-watchtime {
+  font-size: 14px;
+  color: #f59e0b;
+  margin-top: 4px;
+}
+
+/* =========================
+   Filters Section
+========================= */
+.filters {
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filters label {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #141414;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filters select {
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(218, 199, 199, 0.1);
+  color: #111;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.filters select:hover,
+.filters select:focus {
+  background: rgba(182, 177, 177, 0.2);
+  border-color: #fff;
+  outline: none;
+}
+
+/* =========================
+   Sorting Controls
+========================= */
+.sort-controls {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.sort-controls span {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
+  color: #111;
+  transition: all 0.2s ease-in-out;
+}
+
+.sort-controls span:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.sort-controls span::after {
+  content: '';
+  margin-left: 0.3rem;
+}
+
+/* Highlight sorted column arrow */
+.sort-controls span.active {
+  font-weight: 600;
+  color: #0d6efd;
+  /* bootstrap blue */
+}
+
+/* Optional: arrow for asc/desc handled inline in JSX */

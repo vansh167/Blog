@@ -6,14 +6,17 @@ const {
   getPostById,
   updatePost,
   deletePost,
-} = require('../controllers/postController');
-const protect = require('../middleware/authMiddleware');
+} = require('../controllers/postController'); // ✅ must export a function
 
-router.route('/').get(getPosts).post(protect, createPost);
-router
-  .route('/:id')
+const protect = require('../middleware/authMiddleware'); // ✅ make sure this exports a function
+
+router.route('/')
+  .get(getPosts)
+  .post(protect, createPost);
+
+router.route('/:id')
   .get(getPostById)
   .put(protect, updatePost)
-  .delete(protect, deletePost);
+  .delete(protect, deletePost); // ✅ both must be functions
 
 module.exports = router;

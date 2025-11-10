@@ -52,21 +52,23 @@ exports.updatePost = async (req, res) => {
 };
 
 // DELETE post
+// DELETE post
+// DELETE post
 exports.deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: 'Post not found' });
 
-    // ensure req.user exists and is allowed
+    // ensure req.user exists
     if (!req.user || !req.user._id) {
       return res.status(401).json({ message: 'Not authorized' });
     }
 
-    // support both ObjectId and string author shapes
-    const authorId = (post.author && post.author.toString) ? post.author.toString() : String(post.author);
+    const authorId = post.author.toString();
     const userId = req.user._id.toString();
 
-    if (authorId !== userId) {
+    // ✅ Allow deletion if user is author OR super admin
+    if (userId !== authorId && req.user.email !== 'kadmin@gmail.com') {
       return res.status(403).json({ message: 'You can only delete your own posts' });
     }
 
@@ -77,3 +79,5 @@ exports.deletePost = async (req, res) => {
     return res.status(500).json({ message: error.message || 'Server error while deleting post' });
   }
 };
+
+

@@ -1,6 +1,6 @@
 /* Sidebar base style */
 .sidebar {
-  height: 100vh;
+  height: auto;
   width: 90px;
   background: linear-gradient(180deg, #0f172a, #1e293b);
   display: flex;

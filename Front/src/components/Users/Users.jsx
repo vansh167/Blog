@@ -8,8 +8,13 @@ const Users = () => {
   const [error, setError] = useState(null);
   const [deleting, setDeleting] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortField, setSortField] = useState('name'); // default sort by name
+  const [sortOrder, setSortOrder] = useState('asc'); // asc/desc
+  const [filterStatus, setFilterStatus] = useState('all'); // all/active/inactive
+
   const usersPerPage = 8;
 
+  // Fetch users on mount
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -22,7 +27,7 @@ const Users = () => {
       const res = await fetch('http://localhost:5000/api/users', {
         headers: {
           'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...(token && { Authorization: `Bearer ${token}` }),
         },
       });
 
@@ -43,59 +48,83 @@ const Users = () => {
       setLoading(false);
     }
   };
-  // ---------------- DELETE USER FUNCTION ----------------
-  const deleteUser = async (userId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
-    if (!confirmDelete) return;
 
+  const deleteUser = async (userId) => {
+    if (!window.confirm('Are you sure you want to delete this user?')) return;
+
+    setDeleting(userId);
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       });
 
       const data = await res.json();
-
       if (res.ok) {
-        alert("✅ User deleted successfully");
-        // Optionally, update local state to remove the user from UI
-        setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
+        alert('✅ User deleted successfully');
+        setUsers((prev) => prev.filter((u) => u._id !== userId));
       } else {
-        alert(`❌ ${data.message || "Failed to delete user"}`);
+        alert(`❌ ${data.message || 'Failed to delete user'}`);
       }
     } catch (err) {
-      console.error("Delete user error:", err);
-      alert("❌ Server error. Try again later.");
+      console.error('Delete user error:', err);
+      alert('❌ Server error. Try again later.');
+    } finally {
+      setDeleting(null);
     }
   };
 
+  // Sort users
+  const sortedUsers = [...users].sort((a, b) => {
+    let valA = a[sortField] ?? '';
+    let valB = b[sortField] ?? '';
 
-  // Pagination logic
+    if (sortField === 'watchTime') return sortOrder === 'asc' ? valA - valB : valB - valA;
+    return sortOrder === 'asc'
+      ? String(valA).localeCompare(String(valB))
+      : String(valB).localeCompare(String(valA));
+  });
+
+  // Filter users
+  const filteredUsers = sortedUsers.filter((u) => {
+    if (filterStatus === 'active') return u.isActive !== false;
+    if (filterStatus === 'inactive') return u.isActive === false;
+    return true;
+  });
+
+  // Pagination
+  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
-  const totalPages = Math.ceil(users.length / usersPerPage);
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
-  const handleNext = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
+  const handleNext = () => currentPage < totalPages && setCurrentPage((p) => p + 1);
+  const handlePrev = () => currentPage > 1 && setCurrentPage((p) => p - 1);
 
   const totalUsers = users.length;
   const activeUsers = users.filter((u) => u.isActive !== false).length;
+  const totalWatchTime = users.reduce((sum, u) => sum + (u.watchTime || 0), 0);
+
+  const formatWatchTime = (minutes) => {
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    return `${h}h ${m}m`;
+  };
+
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortOrder((o) => (o === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortOrder('asc');
+    }
+  };
+
+  const maxWatchTime = Math.max(...users.map((u) => u.watchTime || 0));
 
   return (
     <AuthorLayout>
@@ -113,6 +142,21 @@ const Users = () => {
               <h3>Active Users</h3>
               <p>{activeUsers}</p>
             </div>
+            <div className="stat-card glass watch-time">
+              <h3>Total Watch Time</h3>
+              <p>{formatWatchTime(totalWatchTime)}</p>
+            </div>
+          </div>
+
+          <div className="filters">
+            <label>
+              Filter:
+              <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+                <option value="all">All Users</option>
+                <option value="active">Active Users</option>
+                <option value="inactive">Inactive Users</option>
+              </select>
+            </label>
           </div>
         </div>
 
@@ -124,17 +168,18 @@ const Users = () => {
             <div className="users-grid">
               {currentUsers.length === 0 && <div className="no-users">No users found.</div>}
               {currentUsers.map((u) => (
-                <div className="user-card glass" key={u._id}>
+                <div
+                  className={`user-card glass ${u.watchTime === maxWatchTime ? 'top-watcher' : ''}`}
+                  key={u._id}
+                >
                   <div className="user-info">
-                    <div className="user-avatar">
-                      {u.name ? u.name.charAt(0).toUpperCase() : 'U'}
-                    </div>
+                    <div className="user-avatar">{u.name?.charAt(0).toUpperCase() || 'U'}</div>
                     <div>
                       <strong className="user-name">{u.name}</strong>
                       <p className="user-email">{u.email}</p>
+                      <p className="user-watchtime">Watch Time: {formatWatchTime(u.watchTime || 0)}</p>
                     </div>
                   </div>
-
                   <button
                     className="delete-btn"
                     onClick={() => deleteUser(u._id)}
@@ -146,7 +191,18 @@ const Users = () => {
               ))}
             </div>
 
-            {users.length > usersPerPage && (
+            {/* Sorting */}
+            <div className="sort-controls">
+              {['name', 'email', 'watchTime'].map((field) => (
+                <span key={field} onClick={() => handleSort(field)}>
+                  Sort by {field.charAt(0).toUpperCase() + field.slice(1)}{' '}
+                  {sortField === field ? (sortOrder === 'asc' ? '↑' : '↓') : ''}
+                </span>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
               <div className="pagination">
                 <button onClick={handlePrev} disabled={currentPage === 1}>
                   ⬅ Previous

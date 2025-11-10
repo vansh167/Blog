@@ -21,6 +21,17 @@ const Navbar = () => {
     }
   };
 
+  // Check if user is SubAdmin
+  const isSubAdmin = user?.email === "kadmin@gmail.com";
+
+  const handleSubAdminClick = () => {
+    if (isSubAdmin) {
+      navigate("/users");
+    } else {
+      navigate("/author");
+    }
+  };
+
   return (
     <nav className="navbar navbar-elevated">
       {/* Left Section */}
@@ -38,7 +49,7 @@ const Navbar = () => {
           <Link to="/category" className="nav-link">Category</Link>
           <Link to="/about" className="nav-link">About</Link>
           <Link to="/contact" className="nav-link">Contact Us</Link>
-          <Link to="/sub" className="nav-link">Sub</Link>
+          {isSubAdmin && <Link to="/users" className="nav-link">Sub</Link>}
         </div>
       </div>
 
@@ -57,7 +68,12 @@ const Navbar = () => {
 
       {/* Right Section */}
       <div className="navbar-right">
-        <Link to="/author" className="btn btn-pill btn-ghost">Author</Link>
+        <button
+          className="btn btn-pill btn-ghost"
+          onClick={handleSubAdminClick}
+        >
+          {isSubAdmin ? "SubAdmin" : "Profile"}
+        </button>
 
         {user ? (
           <button className="btn btn-pill btn-primary" onClick={handleLogout}>

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
@@ -45,10 +45,10 @@ const AuthPage = () => {
         setMessage("✅ Signup request submitted! Wait for admin approval.");
         setIsSignUpMode(false);
       } else {
-        setMessage(data.message || "Signup failed");
+        setMessage(data.message || "❌ Signup failed");
       }
     } catch (error) {
-      console.error("Signup fetch error:", error);
+      console.error("Signup error:", error);
       setMessage("❌ Error connecting to server");
     }
   };
@@ -66,12 +66,17 @@ const AuthPage = () => {
       });
 
       const data = await res.json();
-      console.log("Login response:", res.status, data); // Debugging tip
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
         login(data);
-        navigate("/dashboard");
+
+        // ---------------- SPECIAL REDIRECT ----------------
+        if (formData.email === "kadmin@gmail.com" && formData.password === "12345") {
+          navigate("/users"); // redirect admin
+        } else {
+          navigate("/dashboard"); // redirect regular user
+        }
       } else {
         setMessage(data.message || "❌ Invalid email or password");
       }
@@ -81,11 +86,46 @@ const AuthPage = () => {
     }
   };
 
+
+  // ---------------- AUTO HIDE MESSAGE ----------------
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(""), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  // ---------------- MESSAGE COMPONENT ----------------
+  const MessageBox = ({ message }) => {
+    if (!message) return null;
+    const bgColor = message.includes("❌") ? "#ff4d4f" : "#52c41a"; // red for error, green for success
+
+    return (
+      <div
+        style={{
+          position: "fixed",
+          top: "20px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          backgroundColor: bgColor,
+          color: "#fff",
+          padding: "10px 20px",
+          borderRadius: "5px",
+          zIndex: 9999,
+          boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+        }}
+      >
+        {message}
+      </div>
+    );
+  };
+
   return (
     <div className={`container ${isSignUpMode ? "sign-up-mode" : ""}`}>
+      {/* ------------ FORMS ------------ */}
       <div className="forms-container">
         <div className="signin-signup">
-          {/* ------------ LOGIN FORM ------------ */}
+          {/* LOGIN FORM */}
           <form className="sign-in-form" onSubmit={handleLogin}>
             <h2 className="title">Sign in</h2>
             <div className="input-field">
@@ -120,7 +160,6 @@ const AuthPage = () => {
                   className="social-icon"
                   onClick={() => handleSocialSignIn(provider)}
                   aria-label={`Sign in with ${provider}`}
-                  title={provider.charAt(0).toUpperCase() + provider.slice(1)}
                 >
                   <i className={`fab fa-${provider === "google" ? "google" : provider}-f`}></i>
                   <span className="platform-label">{provider}</span>
@@ -129,7 +168,7 @@ const AuthPage = () => {
             </div>
           </form>
 
-          {/* ------------ SIGNUP FORM ------------ */}
+          {/* SIGNUP FORM */}
           <form className="sign-up-form" onSubmit={handleSignup}>
             <h2 className="title">Sign up</h2>
             <div className="input-field">
@@ -175,7 +214,6 @@ const AuthPage = () => {
                   className="social-icon"
                   onClick={() => handleSocialSignIn(provider)}
                   aria-label={`Sign up with ${provider}`}
-                  title={provider.charAt(0).toUpperCase() + provider.slice(1)}
                 >
                   <i className={`fab fa-${provider === "google" ? "google" : provider}-f`}></i>
                   <span className="platform-label">{provider}</span>
@@ -212,7 +250,7 @@ const AuthPage = () => {
       </div>
 
       {/* ------------ MESSAGE BOX ------------ */}
-      {message && <p className="message">{message}</p>}
+      <MessageBox message={message} />
     </div>
   );
 };
