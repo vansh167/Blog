@@ -25,9 +25,14 @@ const Navbar = () => {
   const isSubAdmin = user?.email === "kadmin@gmail.com";
 
   const handleSubAdminClick = () => {
-    if (isSubAdmin) {
+    if (!user) {
+      // If user is not logged in, go to login page
+      navigate("/auth");
+    } else if (isSubAdmin) {
+      // If user is SubAdmin, go to Users page
       navigate("/users");
     } else {
+      // Otherwise, go to Profile page
       navigate("/author");
     }
   };
@@ -74,6 +79,7 @@ const Navbar = () => {
         >
           {isSubAdmin ? "SubAdmin" : "Profile"}
         </button>
+
 
         {user ? (
           <button className="btn btn-pill btn-primary" onClick={handleLogout}>
