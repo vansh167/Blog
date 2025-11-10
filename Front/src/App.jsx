@@ -15,13 +15,14 @@ import "./App.css";
 import Sidebar from "./components/Sidebar/SideBar";
 import Users from "./components/Users/Users";
 import Request from "./components/Request/Request";
+import TotalPost from "./components/TotalPosts/TotalPost";
 
 
 
 function App() {
   return (
-    <Router> 
-      <Navbar/> 
+    <Router>
+      <Navbar />
       <Routes>
         {/* Auth page at /auth for clarity; keep / redirect if needed */}
         <Route path="/" element={<AuthPage />} />
@@ -38,16 +39,16 @@ function App() {
         <Route path="/dashboard" element={<Home />} />
         <Route path="/post/:id" element={<SinglePost />} />
         <Route path="/author" element={<Author />} />
-        <Route path="/category" element={<Category/>} />
+        <Route path="/category" element={<Category />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/about" element={<About />} />
-  <Route path="/sub" element={<Sidebar/>} />
-  {/* Users management page (open when clicking User in sidebar) */}
+        <Route path="/sub" element={<Sidebar />} />
+        {/* Users management page (open when clicking User in sidebar) */}
         <Route path="/users" element={<Users />} />
-        <Route path="/request" element={<Request/>} />
-
+        <Route path="/request" element={<Request />} />
+        <Route path="/posts" element={<TotalPost />} />
       </Routes>
-      <Footer/>
+      <Footer />
     </Router>
   );
 }

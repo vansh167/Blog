@@ -11,8 +11,7 @@ const Sidebar = () => {
   const menuItems = [
     { id: "user", label: "User", icon: <User size={22} />, route: '/users' },
     { id: "request", label: "Request", icon: <Mail size={22} />, route: '/request' },
-    { id: "posts", label: "Posts", icon: <FileText size={22} />, route: '/author/posts' },
-    { id: "settings", label: "Settings", icon: <Settings size={22} />, route: '/author/settings' },
+    { id: "posts", label: "Posts", icon: <FileText size={22} />, route: '/posts' },
   ];
 
   const handleClick = (item) => {
@@ -24,9 +23,8 @@ const Sidebar = () => {
   useEffect(() => {
   const path = location.pathname || '';
   if (path.startsWith('/users')) setActive('user');
-  else if (path.startsWith('/author/requests')) setActive('request');
-  else if (path.startsWith('/author/posts')) setActive('posts');
-  else if (path.startsWith('/author/settings')) setActive('settings');
+  else if (path.startsWith('/requests')) setActive('request');
+  else if (path.startsWith('/posts')) setActive('posts');
     // otherwise keep default
   }, [location.pathname]);
 

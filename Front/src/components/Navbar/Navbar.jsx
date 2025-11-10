@@ -33,10 +33,9 @@ const Navbar = () => {
         </Link>
 
         <div className="nav-items">
-          <Link to="/dashboard" className="nav-link">Home</Link>
-          <Link to="/create" className="nav-link">Create</Link>
-          <Link to="/category" className="nav-link">Category</Link>
           <Link to="/dashboard" className="nav-link">Blog</Link>
+          <Link to="/create" className="nav-link">Write</Link>
+          <Link to="/category" className="nav-link">Category</Link>
           <Link to="/about" className="nav-link">About</Link>
           <Link to="/contact" className="nav-link">Contact Us</Link>
           <Link to="/sub" className="nav-link">Sub</Link>
