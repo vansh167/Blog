@@ -1,27 +1,31 @@
-/* -------- Global Body -------- */
+/* ---------------- GLOBAL BODY ---------------- */
 body {
   font-family: 'Poppins', sans-serif;
   background: #f8f9fa;
   margin: 0;
   padding: 0;
-  color: #2d3436;
+  color: #1f2937;
+  /* darker gray for better readability */
+  line-height: 1.7;
+  font-size: 16px;
 }
 
-/* -------- Page Container -------- */
+/* ---------------- PAGE CONTAINER ---------------- */
 .single-page-premium {
   max-width: 1200px;
   margin: 60px auto;
   padding: 0 20px;
 }
 
-/* -------- Post Container -------- */
+/* ---------------- POST CONTAINER ---------------- */
 .post-container-premium {
   display: flex;
   gap: 50px;
   flex-wrap: wrap;
+  align-items: flex-start;
 }
 
-/* -------- Left Image -------- */
+/* ---------------- LEFT IMAGE ---------------- */
 .post-image-premium {
   flex: 0 0 45%;
   display: flex;
@@ -38,21 +42,21 @@ body {
 .post-image-premium img {
   display: block;
   width: 100%;
-  height: auto;            /* keep aspect ratio */
-  max-height: 65vh;        /* prevent overly tall images */
-  object-fit: contain;     /* show full image nicely */
+  height: auto;
+  max-height: 65vh;
+  object-fit: cover;
   border-radius: 12px;
-  background: #f8f8f8;     /* neutral bg for transparent images */
+  background: #f8f8f8;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .post-image-premium img:hover {
   transform: scale(1.02);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.18);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
 }
 
-/* -------- Right Details -------- */
+/* ---------------- RIGHT DETAILS ---------------- */
 .post-details-premium {
   flex: 1 1 50%;
   display: flex;
@@ -61,34 +65,39 @@ body {
 
 /* Title */
 .post-details-premium h1 {
-  font-size: 2.8rem;
-  margin-bottom: 15px;
+  /* font-size: 3rem;
+  margin-bottom: 15px; */
   color: #111827;
+  /* dark shade for professional look */
+  font-weight: 700;
+  line-height: 1.2;
   position: relative;
 }
 
 .post-details-premium h1::after {
   content: "";
-  width: 100px;
+  width: 80px;
   height: 4px;
   background: linear-gradient(90deg, #007bff, #00a8ff);
   display: block;
-  margin-top: 10px;
+  margin-top: 8px;
   border-radius: 2px;
 }
 
 /* Meta Information */
 .meta-premium {
   display: flex;
-  gap: 20px;
-  font-size: 0.95rem;
-  color: #576574;
+  gap: 18px;
+  font-size: 0.9rem;
+  color: #6b7280;
+  /* medium gray for subtlety */
   margin: 20px 0;
   flex-wrap: wrap;
 }
 
 .meta-premium .author {
   font-weight: 600;
+  color: #111827;
 }
 
 .meta-premium .date {
@@ -98,21 +107,22 @@ body {
 .meta-premium .category {
   background: #e0f0ff;
   color: #007bff;
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: 12px;
   font-weight: 500;
+  font-size: 0.85rem;
 }
 
 /* Tags Section */
 .tags-premium {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .tags-premium .tag {
   display: inline-block;
   background: #f1f2f6;
-  color: #2d3436;
-  padding: 5px 12px;
+  color: #1f2937;
+  padding: 6px 14px;
   margin: 0 8px 8px 0;
   border-radius: 12px;
   font-size: 0.85rem;
@@ -127,89 +137,87 @@ body {
 
 /* Content Paragraphs */
 .content-premium p {
-  font-size: 1rem;
-  line-height: 1.8;
-  margin-bottom: 18px;
-  color: #2d3436;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 10px;
+  color: #374151;
+  /* slightly darker than body for easy reading */
 }
 
-/* -------- Actions Buttons -------- */
-.actions-premium {
-  display: flex;
-  gap: 15px;
-  margin-top: 30px;
-  flex-wrap: wrap;
-}
-
-.actions-premium button,
-.actions-premium .back-btn {
-  padding: 10px 18px;
-  font-size: 0.95rem;
+/* Optional: make headings inside content stand out */
+.content-premium h2 {
+  font-size: 1.8rem;
+  margin: 25px 0 15px 0;
+  color: #111827;
   font-weight: 600;
-  border-radius: 10px;
+}
+
+.content-premium h3 {
+  font-size: 1.4rem;
+  margin: 20px 0 12px 0;
+  color: #111827;
+  font-weight: 500;
+}
+
+/* ---------------- ACTION ICONS (INSTAGRAM STYLE) ---------------- */
+.action-icons {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 25px;
+  font-size: 28px;
+}
+
+.icon {
   cursor: pointer;
-  border: 1px solid #e5e7eb; /* subtle border */
-  text-decoration: none;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
-  box-shadow: none; /* remove heavy shadows for a cleaner look */
-  background-color: #ffffff;
+  color: #6b7280;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.icon:hover {
+  transform: scale(1.25);
   color: #111827;
 }
 
-.actions-premium button:hover,
-.actions-premium .back-btn:hover {
-  background-color: #f3f4f6;
-  border-color: #d1d5db;
+/* Heart (like) */
+.icon.heart.liked {
+  color: #e60073;
+  transform: scale(1.5);
 }
 
-.actions-premium button:active,
-.actions-premium .back-btn:active {
-  transform: translateY(1px);
+/* Comment */
+.icon.comment:hover {
+  color: #0095f6;
 }
 
-.actions-premium button:focus-visible,
-.actions-premium .back-btn:focus-visible {
-  outline: 2px solid #2563eb; /* accessible focus ring */
-  outline-offset: 2px;
+/* Share */
+.icon.share:hover {
+  color: #ffbf00;
 }
 
-/* Back to Home Button variant */
+/* ---------------- BACK BUTTON ---------------- */
+.back-link-container {
+  margin-top: 25px;
+}
+
 .back-btn {
-  background-color: #111827;
-  color: #ffffff;
-  border-color: #111827;
+  text-decoration: none;
+  color: #111827;
+  background-color: #f2f2f2;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
 }
 
 .back-btn:hover {
-  background-color: #0f172a;
-  border-color: #0f172a;
+  background-color: #111827;
+  color: #fff;
+  transform: translateY(-1px);
 }
 
-/* Like Button variant */
-.like-btn {
-  background-color: #ffffff;
-  color: #ef4444;          /* red accent */
-  border-color: #fecaca;    /* soft red border */
-}
-
-.like-btn:hover {
-  background-color: #fef2f2; /* light red hover */
-  border-color: #fca5a5;
-}
-
-/* Share Button variant */
-.share-btn {
-  background-color: #ffffff;
-  color: #10b981;          /* green accent */
-  border-color: #bbf7d0;   /* soft green border */
-}
-
-.share-btn:hover {
-  background-color: #ecfdf5; /* light green hover */
-  border-color: #86efac;
-}
-
-/* -------- Responsive Design -------- */
+/* ---------------- RESPONSIVE DESIGN ---------------- */
 @media (max-width: 950px) {
   .post-container-premium {
     flex-direction: column;
@@ -217,7 +225,8 @@ body {
     gap: 30px;
   }
 
-  .post-image-premium, .post-details-premium {
+  .post-image-premium,
+  .post-details-premium {
     width: 100%;
   }
 
@@ -229,29 +238,22 @@ body {
     justify-content: center;
   }
 
-  .actions-premium {
+  .action-icons {
     justify-content: center;
   }
 
   .post-image-premium img {
-    max-height: 50vh; /* slightly shorter on small screens */
-  }
-}
-
-@media (min-width: 1200px) {
-  .post-image-premium {
-    max-width: 1100px; /* allow larger image on very wide screens */
+    max-height: 50vh;
   }
 }
 
 @media (max-width: 480px) {
   .post-details-premium h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
 
-  .actions-premium button,
-  .actions-premium .back-btn {
-    width: 100%;
-    text-align: center;
+  .action-icons {
+    font-size: 24px;
+    gap: 16px;
   }
 }
