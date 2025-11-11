@@ -1,6 +1,6 @@
 import React from "react";
 import "./Category.css";
-import { FaLaptopCode, FaPalette, FaBriefcase, FaHeartbeat, FaFlask, FaBook } from "react-icons/fa";
+import { FaLaptopCode, FaLaugh, FaBriefcase, FaHeartbeat, FaFlask, FaBook } from "react-icons/fa";
 
 const categories = [
     {
@@ -10,10 +10,10 @@ const categories = [
         description: "Latest trends in software development, AI, cybersecurity, and engineering technologies that shape our digital future.",
     },
     {
-        icon: <FaPalette className="cat-icon design" />,
-        title: "Design",
-        articles: "26 articles",
-        description: "UI/UX design principles, creative inspiration, design tools, and craft methods for creating stunning digital experiences.",
+        icon: <FaLaugh className="cat-icon funny" />,
+        title: "Funny",
+        articles: "18 articles",
+        description: "Humor, jokes, memes, and entertaining stories to make your day brighter and bring laughter to your life.",
     },
     {
         icon: <FaBriefcase className="cat-icon business" />,
@@ -52,10 +52,6 @@ const Category = () => {
             <p className="category-subtitle">
                 Discover amazing content organized by topics that interest you most. Explore our diverse collection of articles and insights.
             </p>
-
-            {/* <div className="search-bar">
-                <input type="text" placeholder="Search categories..." />
-            </div> */}
 
             <div className="category-grid">
                 {categories.map((cat, index) => (

@@ -1,8 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import bannerImage from "../images/Banner.jpg";
 import "./Banner.css";
 
 const Banner = () => {
+  const navigate = useNavigate();
+
+  const handleExplore = () => {
+    navigate("/category"); // navigate to /category
+  };
+
   return (
     <div className="banner-container">
       <div className="banner-text">
@@ -15,7 +22,9 @@ const Banner = () => {
           and insightful articles that spark curiosity <br />
           and creativity every day.
         </p>
-        <button className="banner-btn">Explore Now</button>
+        <button className="banner-btn" onClick={handleExplore}>
+          Explore Now
+        </button>
       </div>
       <div className="banner-image">
         <img src={bannerImage} alt="Blog Banner" />
@@ -24,4 +33,4 @@ const Banner = () => {
   );
 };
 
-export default Banner; 
+export default Banner;

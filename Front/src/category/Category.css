@@ -144,3 +144,8 @@
 .tag:hover {
     background: #e5e7eb;
 }
+
+.cat-icon.funny {
+    color: #f59e0b;
+    /* Orange/yellow for fun */
+}

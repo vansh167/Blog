@@ -141,3 +141,25 @@
     font-size: 1rem;
   }
 }
+
+.hashtag-suggestions {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hashtag-suggestions .suggestion {
+  background: #2563eb;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hashtag-suggestions .suggestion:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
